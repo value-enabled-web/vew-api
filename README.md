@@ -1,8 +1,10 @@
 # 👨‍🔬 vat-api
 
-Experimental APIs for [Value Added Text](https://github.com/seetee-io/value-enabled-text).
+An experimental API for [Value-Added Text](https://github.com/seetee-io/value-enabled-text).
 
-## Run APIs
+## How to Run
+
+You need a [somewhat recent version of Node.js](https://nodejs.org/en/download) to run this.
 
 - `npm install`; then
 
@@ -11,7 +13,7 @@ Experimental APIs for [Value Added Text](https://github.com/seetee-io/value-enab
 
 The APIs will be served on port 3000.
 
-## Available APIs
+## API
 
 ### `GET /upcycle?url=<url>`
 
