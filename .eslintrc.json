@@ -1,4 +1,6 @@
 {
   "extends": "standard",
-  "comma-dangle": ["error", "always-multiline"]
+  "rules": {
+    "comma-dangle": ["error", "always-multiline"]
+  }
 }
