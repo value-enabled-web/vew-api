@@ -6,7 +6,7 @@ import DOMPurify from 'dompurify'
 import { Readability, isProbablyReaderable } from '@mozilla/readability'
 import TurndownService from 'turndown'
 
-import fs from 'fs'
+import { matchLightningAddress } from './utils.js'
 
 const app = express()
 const port = 3000
@@ -15,6 +15,7 @@ const urlValidator = (req, res, next) => {
   if (!req.query.url) {
     res.status(400).json({ error: 'missing url query parameter' })
   }
+
   try {
     const url = new URL(req.query.url)
 
@@ -38,6 +39,8 @@ app.get('/upcycle', urlValidator, async (req, res, next) => {
     const response = await fetch(req.query.url)
     const rawHtml = await response.text()
 
+    const lnAddress = matchLightningAddress(rawHtml)
+
     const window = new JSDOM('').window
     const purify = DOMPurify(window)
     const cleanHtml = purify.sanitize(rawHtml, { WHOLE_DOCUMENT: true })
@@ -54,14 +57,23 @@ app.get('/upcycle', urlValidator, async (req, res, next) => {
     const turndownService = new TurndownService()
     const markdown = turndownService.turndown(article.content)
 
-    res.json({
+    const json = {
       id: url,
       content: markdown,
       _data: {
         title: article.title,
         html: article.content,
       },
-    })
+    }
+
+    if (lnAddress) {
+      json.paymentInfo = {
+        type: 'lnaddress',
+        value: lnAddress,
+      }
+    }
+
+    res.json(json)
   } catch (err) {
     next(err)
   }
