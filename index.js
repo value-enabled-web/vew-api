@@ -6,7 +6,7 @@ import DOMPurify from 'dompurify'
 import { Readability, isProbablyReaderable } from '@mozilla/readability'
 import TurndownService from 'turndown'
 
-import { matchLightningAddress } from './utils.js'
+import { matchLightningAddress, parseTitle, parseHostname } from './utils.js'
 
 const app = express()
 const port = 3000
@@ -61,7 +61,8 @@ app.get('/upcycle', urlValidator, async (req, res, next) => {
       id: url,
       content: markdown,
       _data: {
-        title: article.title,
+        title: parseTitle(article.title),
+        hostname: parseHostname(url),
         html: article.content,
       },
     }

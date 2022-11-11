@@ -8,3 +8,18 @@ export const matchLightningAddress = (text) => {
 
   return null
 }
+
+export const parseTitle = (title) => {
+  // Remove anything behind a pipe (|) symbol.
+  return title.split('|')[0]
+}
+
+export const parseHostname = (url) => {
+  try {
+    const parsedUrl = new URL(url)
+
+    return parsedUrl.hostname
+  } catch {
+    return null
+  }
+}
