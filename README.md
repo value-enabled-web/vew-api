@@ -27,6 +27,10 @@ For a successful query, a JSON object like this:
 {
   "id": "<...>", // normalized article url,
   "content": "<...>" // readable article markdown,
+  "paymentInfo": {
+    "type": "<...>", // e.g. "lnAddress"
+    "value": "<...>"
+  }
   "_data": { // non standardized data
     "title": "<...>", // article title
     "html": "<...>", // cleaned article html
