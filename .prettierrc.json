@@ -1,6 +1,14 @@
 {
-  "trailingComma": "es5",
-  "tabWidth": 2,
+  "arrowParens": "avoid",
+  "bracketSameLine": true,
+  "singleQuote": true,
+  "trailingComma": "all",
+  "bracketSpacing": true,
   "semi": false,
-  "singleQuote": true
+  "importOrderSeparation": true,
+  "importOrder": [
+    "^(express)$",
+    "<THIRD_PARTY_MODULES>",
+    "^[.]"
+  ]
 }

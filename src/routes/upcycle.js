@@ -1,15 +1,13 @@
 import express from 'express'
-import normalizeUrl from 'normalize-url'
-import fetch from 'node-fetch'
-import { JSDOM } from 'jsdom'
-import DOMPurify from 'dompurify'
+
 import { Readability, isProbablyReaderable } from '@mozilla/readability'
+import DOMPurify from 'dompurify'
+import { JSDOM } from 'jsdom'
+import fetch from 'node-fetch'
+import normalizeUrl from 'normalize-url'
 import TurndownService from 'turndown'
 
-import { matchLightningAddress, parseTitle, parseHostname } from './utils.js'
-
-const app = express()
-const port = 3000
+const router = express.Router()
 
 const urlValidator = (req, res, next) => {
   if (!req.query.url) {
@@ -32,12 +30,24 @@ const urlValidator = (req, res, next) => {
   }
 }
 
-app.get('/upcycle', urlValidator, async (req, res, next) => {
+// Same matching as Alby:
+// https://github.com/getAlby/lightning-browser-extension/blob/master/src/extension/content-script/batteries/helpers.ts
+const matchLightningAddress = text => {
+  // The second lightning emoji is succeeded by an invisible variation
+  // selector-16 character: https://emojipedia.org/variation-selector-16/️
+  const regex = /((⚡|⚡️):?|lightning:|lnurl:)\s?([\w.-]+@[\w.-]+[.][\w.-]+)/i
+  const match = text.match(regex)
+  if (match) return match[3]
+
+  return null
+}
+
+router.get('/', urlValidator, async (req, res, next) => {
   try {
     const url = normalizeUrl(req.query.url)
 
-    const response = await fetch(req.query.url)
-    const rawHtml = await response.text()
+    const fetchResponse = await fetch(req.query.url)
+    const rawHtml = await fetchResponse.text()
 
     const lnAddress = matchLightningAddress(rawHtml)
 
@@ -57,29 +67,27 @@ app.get('/upcycle', urlValidator, async (req, res, next) => {
     const turndownService = new TurndownService()
     const markdown = turndownService.turndown(article.content)
 
-    const json = {
+    const response = {
       id: url,
       content: markdown,
       _data: {
-        title: parseTitle(article.title),
-        hostname: parseHostname(url),
+        title: article.title.split('|')[0],
+        hostname: new URL(url).hostname,
         html: article.content,
       },
     }
 
     if (lnAddress) {
-      json.paymentInfo = {
+      response.paymentInfo = {
         type: 'lnaddress',
         value: lnAddress,
       }
     }
 
-    res.json(json)
+    res.json(response)
   } catch (err) {
     next(err)
   }
 })
 
-app.listen(port, () => {
-  console.log(`vat-api: listening on port ${port}`)
-})
+export default router
