@@ -1,6 +1,6 @@
-# 👨‍🔬 vat-api
+# 👨‍🔬 vew-api
 
-An experimental API for [Value-Added Text](https://github.com/seetee-io/value-enabled-text).
+An experimental API for [Value-Enabled Text](https://github.com/seetee-io/value-enabled-web).
 
 ## How to Run
 
