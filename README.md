@@ -17,7 +17,7 @@ The APIs will be served on port 3000.
 
 ### `GET /upcycle?url=<url>`
 
-Fetches and parses an article into readable VAT format.
+Fetches and parses an article into readable VEW format.
 
 **Returns**
 
