@@ -1,6 +1,6 @@
 # 👨‍🔬 vew-api
 
-An experimental API for [Value-Enabled Text](https://github.com/seetee-io/value-enabled-web).
+An experimental API for the [Value-Enabled Web](https://github.com/seetee-io/value-enabled-web) (VEW).
 
 ## How to Run
 
