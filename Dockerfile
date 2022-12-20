@@ -1,7 +1,7 @@
+FROM node:18
+
 LABEL org.opencontainers.image.source=https://github.com/seetee-io/vew-api
 LABEL org.opencontainers.image.description="VEW API"
-
-FROM node:18
 
 WORKDIR /usr/src/app
 
